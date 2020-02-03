@@ -25,6 +25,13 @@ func (e Env) lookup() (string, bool) {
 	return "", false
 }
 
+func (e Env) Has() bool {
+	if _, ok := e.lookup(); ok {
+		return true
+	}
+	return false
+}
+
 func (e Env) Bool(defaultValue bool) bool {
 	if v, ok := e.lookup(); ok {
 		if v == "true" {
@@ -126,6 +133,10 @@ func (e Env) Duration(defaultValue time.Duration) time.Duration {
 		}
 	}
 	return defaultValue
+}
+
+func Has(names ...string) bool {
+	return Get(names...).Has()
 }
 
 func Bool(names ...string) bool {
