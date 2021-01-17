@@ -4,47 +4,44 @@ import (
 	"github.com/goccha/log"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 )
 
 func Get(names ...string) Env {
-	return Env{Names: names}
+	for _, name := range names {
+		name = strings.Trim(name, " ")
+		v, ok := os.LookupEnv(name)
+		if ok {
+			return Env{Name: name, value: v}
+		}
+	}
+	return Env{}
 }
 
 type Env struct {
-	Names []string
-}
-
-func (e Env) lookup() (string, bool) {
-	for _, name := range e.Names {
-		v, ok := os.LookupEnv(name)
-		if ok {
-			return v, true
-		}
-	}
-	return "", false
+	Name  string
+	value string
 }
 
 func (e Env) Has() bool {
-	if _, ok := e.lookup(); ok {
-		return true
-	}
-	return false
+	return e.Name != ""
 }
 
 func (e Env) Bool(defaultValue bool) bool {
-	if v, ok := e.lookup(); ok {
-		if v == "true" {
-			return true
+	if e.value != "" {
+		if v, err := strconv.ParseBool(e.value); err != nil {
+			log.Warn("%+v", err)
+			return defaultValue
 		} else {
-			return false
+			return v
 		}
 	}
 	return defaultValue
 }
 func (e Env) Int(defaultValue int) int {
-	if v, ok := e.lookup(); ok {
-		i, err := strconv.Atoi(v)
+	if e.value != "" {
+		i, err := strconv.Atoi(e.value)
 		if err != nil {
 			log.Warn("%+v", err)
 			return defaultValue
@@ -53,9 +50,31 @@ func (e Env) Int(defaultValue int) int {
 	}
 	return defaultValue
 }
+func (e Env) Int8(defaultValue int8) int8 {
+	if e.value != "" {
+		i, err := strconv.Atoi(e.value)
+		if err != nil {
+			log.Warn("%+v", err)
+			return defaultValue
+		}
+		return int8(i)
+	}
+	return defaultValue
+}
+func (e Env) Int16(defaultValue int16) int16 {
+	if e.value != "" {
+		i, err := strconv.Atoi(e.value)
+		if err != nil {
+			log.Warn("%+v", err)
+			return defaultValue
+		}
+		return int16(i)
+	}
+	return defaultValue
+}
 func (e Env) Int32(defaultValue int32) int32 {
-	if v, ok := e.lookup(); ok {
-		i, err := strconv.Atoi(v)
+	if e.value != "" {
+		i, err := strconv.Atoi(e.value)
 		if err != nil {
 			log.Warn("%+v", err)
 			return defaultValue
@@ -65,8 +84,8 @@ func (e Env) Int32(defaultValue int32) int32 {
 	return defaultValue
 }
 func (e Env) Int64(defaultValue int64) int64 {
-	if v, ok := e.lookup(); ok {
-		i, err := strconv.Atoi(v)
+	if e.value != "" {
+		i, err := strconv.Atoi(e.value)
 		if err != nil {
 			log.Warn("%+v", err)
 			return defaultValue
@@ -75,9 +94,42 @@ func (e Env) Int64(defaultValue int64) int64 {
 	}
 	return defaultValue
 }
+func (e Env) Uint(defaultValue uint) uint {
+	if e.value != "" {
+		i, err := strconv.Atoi(e.value)
+		if err != nil {
+			log.Warn("%+v", err)
+			return defaultValue
+		}
+		return uint(i)
+	}
+	return defaultValue
+}
+func (e Env) Uint8(defaultValue uint8) uint8 {
+	if e.value != "" {
+		i, err := strconv.Atoi(e.value)
+		if err != nil {
+			log.Warn("%+v", err)
+			return defaultValue
+		}
+		return uint8(i)
+	}
+	return defaultValue
+}
+func (e Env) Uint16(defaultValue uint16) uint16 {
+	if e.value != "" {
+		i, err := strconv.Atoi(e.value)
+		if err != nil {
+			log.Warn("%+v", err)
+			return defaultValue
+		}
+		return uint16(i)
+	}
+	return defaultValue
+}
 func (e Env) Uint32(defaultValue uint32) uint32 {
-	if v, ok := e.lookup(); ok {
-		i, err := strconv.Atoi(v)
+	if e.value != "" {
+		i, err := strconv.Atoi(e.value)
 		if err != nil {
 			log.Warn("%+v", err)
 			return defaultValue
@@ -87,8 +139,8 @@ func (e Env) Uint32(defaultValue uint32) uint32 {
 	return defaultValue
 }
 func (e Env) Uint64(defaultValue uint64) uint64 {
-	if v, ok := e.lookup(); ok {
-		i, err := strconv.Atoi(v)
+	if e.value != "" {
+		i, err := strconv.Atoi(e.value)
 		if err != nil {
 			log.Warn("%+v", err)
 			return defaultValue
@@ -98,8 +150,8 @@ func (e Env) Uint64(defaultValue uint64) uint64 {
 	return defaultValue
 }
 func (e Env) Float32(defaultValue float32) float32 {
-	if v, ok := e.lookup(); ok {
-		value, err := strconv.ParseFloat(v, 32)
+	if e.value != "" {
+		value, err := strconv.ParseFloat(e.value, 32)
 		if err != nil {
 			log.Warn("%+v", err)
 			return defaultValue
@@ -109,25 +161,47 @@ func (e Env) Float32(defaultValue float32) float32 {
 	return defaultValue
 }
 func (e Env) Float64(defaultValue float64) float64 {
-	if v, ok := e.lookup(); ok {
-		value, err := strconv.ParseFloat(v, 64)
+	if e.value != "" {
+		value, err := strconv.ParseFloat(e.value, 64)
 		if err != nil {
 			log.Warn("%+v", err)
 			return defaultValue
 		}
-		return float64(value)
+		return value
+	}
+	return defaultValue
+}
+func (e Env) Complex64(defaultValue complex64) complex64 {
+	if e.value != "" {
+		value, err := strconv.ParseComplex(e.value, 64)
+		if err != nil {
+			log.Warn("%+v", err)
+			return defaultValue
+		}
+		return complex64(value)
+	}
+	return defaultValue
+}
+func (e Env) Complex128(defaultValue complex128) complex128 {
+	if e.value != "" {
+		value, err := strconv.ParseComplex(e.value, 128)
+		if err != nil {
+			log.Warn("%+v", err)
+			return defaultValue
+		}
+		return value
 	}
 	return defaultValue
 }
 func (e Env) String(defaultValue string) string {
-	if v, ok := e.lookup(); ok {
-		return v
+	if e.value != "" {
+		return e.value
 	}
 	return defaultValue
 }
 func (e Env) Duration(defaultValue time.Duration) time.Duration {
-	if v, ok := e.lookup(); ok {
-		d, err := time.ParseDuration(v)
+	if e.value != "" {
+		d, err := time.ParseDuration(e.value)
 		if err == nil {
 			return d
 		}
@@ -151,12 +225,32 @@ func Int(names ...string) int {
 	return Get(names...).Int(0)
 }
 
+func Int8(names ...string) int8 {
+	return Get(names...).Int8(0)
+}
+
+func Int16(names ...string) int16 {
+	return Get(names...).Int16(0)
+}
+
 func Int32(names ...string) int32 {
 	return Get(names...).Int32(0)
 }
 
 func Int64(names ...string) int64 {
 	return Get(names...).Int64(0)
+}
+
+func Uint(names ...string) uint {
+	return Get(names...).Uint(0)
+}
+
+func Uint8(names ...string) uint8 {
+	return Get(names...).Uint8(0)
+}
+
+func Uint16(names ...string) uint16 {
+	return Get(names...).Uint16(0)
 }
 
 func Uint32(names ...string) uint32 {
@@ -173,6 +267,14 @@ func Float32(names ...string) float32 {
 
 func Float64(names ...string) float64 {
 	return Get(names...).Float64(0)
+}
+
+func Complex64(names ...string) complex64 {
+	return Get(names...).Complex64(0)
+}
+
+func Complex128(names ...string) complex128 {
+	return Get(names...).Complex128(0)
 }
 
 func Duration(names ...string) time.Duration {
