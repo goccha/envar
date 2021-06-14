@@ -4,10 +4,13 @@ import (
 	"github.com/stretchr/testify/assert"
 	"os"
 	"testing"
+	"time"
 )
 
 type TestStruct struct {
-	Name string `envar:" TEST_1 ,TEST_2; default=TEST"`
+	Name       string        `envar:" TEST_1 ,TEST_2; default=TEST"`
+	Expiration time.Duration `envar:"EXPIRATION;default=10h"`
+	Value      int64         `envar:"TEST_INT64;default=99"`
 }
 
 func Test_Bind(t *testing.T) {

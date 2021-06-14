@@ -93,7 +93,7 @@ func TestUint8(t *testing.T) {
 
 	_ = os.Setenv("TEST_UINT8_1", "zero")
 	expected = 2
-	assert.Equal(t, expected, Get("TEST_UINT8_1").Uint(2))
+	assert.Equal(t, expected, Get("TEST_UINT8_1").Uint8(2))
 }
 
 func TestUint16(t *testing.T) {
@@ -104,7 +104,7 @@ func TestUint16(t *testing.T) {
 
 	_ = os.Setenv("TEST_UINT16_1", "zero")
 	expected = 2
-	assert.Equal(t, expected, Get("TEST_UINT16_1").Uint(2))
+	assert.Equal(t, expected, Get("TEST_UINT16_1").Uint16(2))
 }
 
 func TestUint32(t *testing.T) {

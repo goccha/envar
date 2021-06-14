@@ -3,6 +3,7 @@ package envar
 import (
 	"errors"
 	"github.com/go-playground/validator/v10"
+	"github.com/goccha/log"
 	"reflect"
 	"strings"
 )
@@ -73,6 +74,9 @@ func setValue(field reflect.StructField, value reflect.Value, names []string, de
 	if v.value == "" {
 		v.value = defaultValue
 	}
+	if Bool("ENVAR_BIND_DEBUG") {
+		log.Debug("%s=%s", v.Name, v.value)
+	}
 	switch field.Type.Kind() {
 	case reflect.Bool:
 		value.Set(reflect.ValueOf(v.Bool(false)))
@@ -85,7 +89,11 @@ func setValue(field reflect.StructField, value reflect.Value, names []string, de
 	case reflect.Int32:
 		value.Set(reflect.ValueOf(v.Int32(0)))
 	case reflect.Int64:
-		value.Set(reflect.ValueOf(v.Int64(0)))
+		if name := field.Type.Name(); name == "Duration" {
+			value.Set(reflect.ValueOf(v.Duration(0)))
+		} else {
+			value.Set(reflect.ValueOf(v.Int64(0)))
+		}
 	case reflect.Uint:
 		value.Set(reflect.ValueOf(v.Uint(0)))
 	case reflect.Uint8:
