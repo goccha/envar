@@ -55,15 +55,15 @@ func deploymentOf(value string) DeployEnv {
 		return v
 	}
 	switch value {
-	case "development":
+	case "development", "develop", "dev":
 		return Development
 	case "qa":
 		return QA
+	case "staging", "stg":
+		return Staging
 	case "demo":
 		return Demo
-	case "staging":
-		return Staging
-	case "production":
+	case "production", "prod":
 		return Production
 	default:
 		return Local
@@ -78,10 +78,10 @@ func (d DeployEnv) String() string {
 		return "development"
 	case QA:
 		return "qa"
-	case Demo:
-		return "demo"
 	case Staging:
 		return "staging"
+	case Demo:
+		return "demo"
 	case Production:
 		return "production"
 	default:

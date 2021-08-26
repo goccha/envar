@@ -199,6 +199,29 @@ func (e Env) String(defaultValue string) string {
 	}
 	return defaultValue
 }
+func (e Env) Split(defaultValue, sep string) []string {
+	a := strings.Split(e.String(defaultValue), sep)
+	if strings.Contains(sep, " ") {
+		buf := make([]string, 0, len(a))
+		for i := range a {
+			v := strings.TrimSpace(a[i])
+			if v != "" {
+				buf = append(buf, v)
+			}
+		}
+		return buf
+	}
+	for i := range a {
+		a[i] = strings.TrimSpace(a[i])
+	}
+	return a
+}
+func (e Env) ToUpper(defaultValue string) string {
+	return strings.ToUpper(e.String(defaultValue))
+}
+func (e Env) ToLower(defaultValue string) string {
+	return strings.ToLower(e.String(defaultValue))
+}
 func (e Env) Duration(defaultValue time.Duration) time.Duration {
 	if e.value != "" {
 		d, err := time.ParseDuration(e.value)
@@ -219,6 +242,14 @@ func Bool(names ...string) bool {
 
 func String(names ...string) string {
 	return Get(names...).String("")
+}
+
+func ToUpper(names ...string) string {
+	return Get(names...).ToUpper("")
+}
+
+func ToLower(names ...string) string {
+	return Get(names...).ToLower("")
 }
 
 func Int(names ...string) int {

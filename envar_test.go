@@ -185,6 +185,58 @@ func TestString(t *testing.T) {
 	assert.NotEqual(t, "test", Get("TEST_STRING_PROD").String("prod"))
 }
 
+func TestEnv_Split(t *testing.T) {
+	_ = os.Setenv("TEST_STRING_ARRAY", "test,test1, test2,  test3")
+	a := Get("TEST_STRING_ARRAY").Split("", ",")
+	assert.Equal(t, 4, len(a))
+	for i, v := range a {
+		switch i {
+		case 0:
+			assert.Equal(t, "test", v)
+		case 1:
+			assert.Equal(t, "test1", v)
+		case 2:
+			assert.Equal(t, "test2", v)
+		case 3:
+			assert.Equal(t, "test3", v)
+		}
+	}
+}
+
+func TestEnv_Split_Space(t *testing.T) {
+	_ = os.Setenv("TEST_STRING_ARRAY", "test test1 test2  test3")
+	a := Get("TEST_STRING_ARRAY").Split("", " ")
+	assert.Equal(t, 4, len(a))
+	for i, v := range a {
+		switch i {
+		case 0:
+			assert.Equal(t, "test", v)
+		case 1:
+			assert.Equal(t, "test1", v)
+		case 2:
+			assert.Equal(t, "test2", v)
+		case 3:
+			assert.Equal(t, "test3", v)
+		}
+	}
+}
+
+func TestEnv_Split_MultiSpace(t *testing.T) {
+	_ = os.Setenv("TEST_STRING_ARRAY", "test test1  test2   test3")
+	a := Get("TEST_STRING_ARRAY").Split("", "  ")
+	assert.Equal(t, 3, len(a))
+	for i, v := range a {
+		switch i {
+		case 0:
+			assert.Equal(t, "test test1", v)
+		case 1:
+			assert.Equal(t, "test2", v)
+		case 2:
+			assert.Equal(t, "test3", v)
+		}
+	}
+}
+
 func TestDuration(t *testing.T) {
 	_ = os.Setenv("TEST_DURATION_1", "1m")
 	expected := 1 * time.Minute
