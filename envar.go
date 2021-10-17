@@ -216,6 +216,216 @@ func (e Env) Split(defaultValue, sep string) []string {
 	}
 	return a
 }
+func (e Env) IntSlice(defaultValue []int, sep string) []int {
+	a := e.Split("", sep)
+	if len(a) == 0 {
+		return defaultValue
+	}
+	array := make([]int, 0, len(a))
+	for i, s := range a {
+		if v, err := strconv.Atoi(s); err != nil {
+			log.Warn("[%d]:%v", i, err)
+		} else {
+			array = append(array, v)
+		}
+	}
+	return array
+}
+func (e Env) Int8Slice(defaultValue []int8, sep string) []int8 {
+	a := e.Split("", sep)
+	if len(a) == 0 {
+		return defaultValue
+	}
+	array := make([]int8, 0, len(a))
+	for i, s := range a {
+		if v, err := strconv.ParseInt(s, 10, 8); err != nil {
+			log.Warn("[%d]:%v", i, err)
+		} else {
+			array = append(array, int8(v))
+		}
+	}
+	return array
+}
+func (e Env) Int16Slice(defaultValue []int16, sep string) []int16 {
+	a := e.Split("", sep)
+	if len(a) == 0 {
+		return defaultValue
+	}
+	array := make([]int16, 0, len(a))
+	for i, s := range a {
+		if v, err := strconv.ParseInt(s, 10, 16); err != nil {
+			log.Warn("[%d]:%v", i, err)
+		} else {
+			array = append(array, int16(v))
+		}
+	}
+	return array
+}
+func (e Env) Int32Slice(defaultValue []int32, sep string) []int32 {
+	a := e.Split("", sep)
+	if len(a) == 0 {
+		return defaultValue
+	}
+	array := make([]int32, 0, len(a))
+	for i, s := range a {
+		if v, err := strconv.ParseInt(s, 10, 16); err != nil {
+			log.Warn("[%d]:%v", i, err)
+		} else {
+			array = append(array, int32(v))
+		}
+	}
+	return array
+}
+func (e Env) Int64Slice(defaultValue []int64, sep string) []int64 {
+	a := e.Split("", sep)
+	if len(a) == 0 {
+		return defaultValue
+	}
+	array := make([]int64, 0, len(a))
+	for i, s := range a {
+		if v, err := strconv.ParseInt(s, 10, 64); err != nil {
+			log.Warn("[%d]:%v", i, err)
+		} else {
+			array = append(array, v)
+		}
+	}
+	return array
+}
+func (e Env) UintSlice(defaultValue []uint, sep string) []uint {
+	a := e.Split("", sep)
+	if len(a) == 0 {
+		return defaultValue
+	}
+	array := make([]uint, 0, len(a))
+	for i, s := range a {
+		if v, err := strconv.Atoi(s); err != nil {
+			log.Warn("[%d]:%v", i, err)
+		} else {
+			array = append(array, uint(v))
+		}
+	}
+	return array
+}
+func (e Env) Uint8Slice(defaultValue []uint8, sep string) []uint8 {
+	a := e.Split("", sep)
+	if len(a) == 0 {
+		return defaultValue
+	}
+	array := make([]uint8, 0, len(a))
+	for i, s := range a {
+		if v, err := strconv.ParseUint(s, 10, 8); err != nil {
+			log.Warn("[%d]:%v", i, err)
+		} else {
+			array = append(array, uint8(v))
+		}
+	}
+	return array
+}
+func (e Env) Uint16Slice(defaultValue []uint16, sep string) []uint16 {
+	a := e.Split("", sep)
+	if len(a) == 0 {
+		return defaultValue
+	}
+	array := make([]uint16, 0, len(a))
+	for i, s := range a {
+		if v, err := strconv.ParseUint(s, 10, 16); err != nil {
+			log.Warn("[%d]:%v", i, err)
+		} else {
+			array = append(array, uint16(v))
+		}
+	}
+	return array
+}
+func (e Env) Uint32Slice(defaultValue []uint32, sep string) []uint32 {
+	a := e.Split("", sep)
+	if len(a) == 0 {
+		return defaultValue
+	}
+	array := make([]uint32, 0, len(a))
+	for i, s := range a {
+		if v, err := strconv.ParseUint(s, 10, 16); err != nil {
+			log.Warn("[%d]:%v", i, err)
+		} else {
+			array = append(array, uint32(v))
+		}
+	}
+	return array
+}
+func (e Env) Uint64Slice(defaultValue []uint64, sep string) []uint64 {
+	a := e.Split("", sep)
+	if len(a) == 0 {
+		return defaultValue
+	}
+	array := make([]uint64, 0, len(a))
+	for i, s := range a {
+		if v, err := strconv.ParseUint(s, 10, 64); err != nil {
+			log.Warn("[%d]:%v", i, err)
+		} else {
+			array = append(array, v)
+		}
+	}
+	return array
+}
+func (e Env) Float32Slice(defaultValue []float32, sep string) []float32 {
+	a := e.Split("", sep)
+	if len(a) == 0 {
+		return defaultValue
+	}
+	array := make([]float32, 0, len(a))
+	for i, s := range a {
+		if v, err := strconv.ParseFloat(s, 32); err != nil {
+			log.Warn("[%d]:%v", i, err)
+		} else {
+			array = append(array, float32(v))
+		}
+	}
+	return array
+}
+func (e Env) Float64Slice(defaultValue []float64, sep string) []float64 {
+	a := e.Split("", sep)
+	if len(a) == 0 {
+		return defaultValue
+	}
+	array := make([]float64, 0, len(a))
+	for i, s := range a {
+		if v, err := strconv.ParseFloat(s, 64); err != nil {
+			log.Warn("[%d]:%v", i, err)
+		} else {
+			array = append(array, v)
+		}
+	}
+	return array
+}
+func (e Env) Complex64Slice(defaultValue []complex64, sep string) []complex64 {
+	a := e.Split("", sep)
+	if len(a) == 0 {
+		return defaultValue
+	}
+	array := make([]complex64, 0, len(a))
+	for i, s := range a {
+		if v, err := strconv.ParseComplex(s, 64); err != nil {
+			log.Warn("[%d]:%v", i, err)
+		} else {
+			array = append(array, complex64(v))
+		}
+	}
+	return array
+}
+func (e Env) Complex128Slice(defaultValue []complex128, sep string) []complex128 {
+	a := e.Split("", sep)
+	if len(a) == 0 {
+		return defaultValue
+	}
+	array := make([]complex128, 0, len(a))
+	for i, s := range a {
+		if v, err := strconv.ParseComplex(s, 128); err != nil {
+			log.Warn("[%d]:%v", i, err)
+		} else {
+			array = append(array, v)
+		}
+	}
+	return array
+}
 func (e Env) ToUpper(defaultValue string) string {
 	return strings.ToUpper(e.String(defaultValue))
 }
@@ -244,6 +454,10 @@ func String(names ...string) string {
 	return Get(names...).String("")
 }
 
+func Split(names ...string) []string {
+	return Get(names...).Split("", ",")
+}
+
 func ToUpper(names ...string) string {
 	return Get(names...).ToUpper("")
 }
@@ -256,56 +470,112 @@ func Int(names ...string) int {
 	return Get(names...).Int(0)
 }
 
+func IntSlice(names ...string) []int {
+	return Get(names...).IntSlice([]int{}, ",")
+}
+
 func Int8(names ...string) int8 {
 	return Get(names...).Int8(0)
+}
+
+func Int8Slice(names ...string) []int8 {
+	return Get(names...).Int8Slice([]int8{}, ",")
 }
 
 func Int16(names ...string) int16 {
 	return Get(names...).Int16(0)
 }
 
+func Int16Slice(names ...string) []int16 {
+	return Get(names...).Int16Slice([]int16{}, ",")
+}
+
 func Int32(names ...string) int32 {
 	return Get(names...).Int32(0)
+}
+
+func Int32Slice(names ...string) []int32 {
+	return Get(names...).Int32Slice([]int32{}, ",")
 }
 
 func Int64(names ...string) int64 {
 	return Get(names...).Int64(0)
 }
 
+func Int64Slice(names ...string) []int64 {
+	return Get(names...).Int64Slice([]int64{}, ",")
+}
+
 func Uint(names ...string) uint {
 	return Get(names...).Uint(0)
+}
+
+func UintSlice(names ...string) []uint {
+	return Get(names...).UintSlice([]uint{}, ",")
 }
 
 func Uint8(names ...string) uint8 {
 	return Get(names...).Uint8(0)
 }
 
+func Uint8Slice(names ...string) []uint8 {
+	return Get(names...).Uint8Slice([]uint8{}, ",")
+}
+
 func Uint16(names ...string) uint16 {
 	return Get(names...).Uint16(0)
+}
+
+func Uint16Slice(names ...string) []uint16 {
+	return Get(names...).Uint16Slice([]uint16{}, ",")
 }
 
 func Uint32(names ...string) uint32 {
 	return Get(names...).Uint32(0)
 }
 
+func Uint32Slice(names ...string) []uint32 {
+	return Get(names...).Uint32Slice([]uint32{}, ",")
+}
+
 func Uint64(names ...string) uint64 {
 	return Get(names...).Uint64(0)
+}
+
+func Uint64Slice(names ...string) []uint64 {
+	return Get(names...).Uint64Slice([]uint64{}, ",")
 }
 
 func Float32(names ...string) float32 {
 	return Get(names...).Float32(0)
 }
 
+func Float32Slice(names ...string) []float32 {
+	return Get(names...).Float32Slice([]float32{}, ",")
+}
+
 func Float64(names ...string) float64 {
 	return Get(names...).Float64(0)
+}
+
+func Float64Slice(names ...string) []float64 {
+	return Get(names...).Float64Slice([]float64{}, ",")
 }
 
 func Complex64(names ...string) complex64 {
 	return Get(names...).Complex64(0)
 }
 
+func Complex64Slice(names ...string) []complex64 {
+	return Get(names...).Complex64Slice([]complex64{}, ",")
+}
+
 func Complex128(names ...string) complex128 {
 	return Get(names...).Complex128(0)
+}
+
+func Complex128Slice(names ...string) []complex128 {
+	return Get(names...).Complex128Slice([]complex128{}, ",")
 }
 
 func Duration(names ...string) time.Duration {

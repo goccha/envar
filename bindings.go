@@ -114,6 +114,43 @@ func setValue(field reflect.StructField, value reflect.Value, names []string, de
 		value.Set(reflect.ValueOf(v.Complex128(0)))
 	case reflect.String:
 		value.Set(reflect.ValueOf(v.String("")))
+	case reflect.Slice:
+		setSlice(field.Type.Elem().Kind(), value, v)
 	}
 	return nil
+}
+
+func setSlice(kind reflect.Kind, value reflect.Value, v Env) {
+	switch kind {
+	case reflect.String:
+		value.Set(reflect.ValueOf(v.Split("", ",")))
+	case reflect.Int:
+		value.Set(reflect.ValueOf(v.IntSlice([]int{}, ",")))
+	case reflect.Int8:
+		value.Set(reflect.ValueOf(v.Int8Slice([]int8{}, ",")))
+	case reflect.Int16:
+		value.Set(reflect.ValueOf(v.Int16Slice([]int16{}, ",")))
+	case reflect.Int32:
+		value.Set(reflect.ValueOf(v.Int32Slice([]int32{}, ",")))
+	case reflect.Int64:
+		value.Set(reflect.ValueOf(v.Int64Slice([]int64{}, ",")))
+	case reflect.Uint:
+		value.Set(reflect.ValueOf(v.UintSlice([]uint{}, ",")))
+	case reflect.Uint8:
+		value.Set(reflect.ValueOf(v.Uint8Slice([]uint8{}, ",")))
+	case reflect.Uint16:
+		value.Set(reflect.ValueOf(v.Uint16Slice([]uint16{}, ",")))
+	case reflect.Uint32:
+		value.Set(reflect.ValueOf(v.Uint32Slice([]uint32{}, ",")))
+	case reflect.Uint64:
+		value.Set(reflect.ValueOf(v.Uint64Slice([]uint64{}, ",")))
+	case reflect.Float32:
+		value.Set(reflect.ValueOf(v.Float32Slice([]float32{}, ",")))
+	case reflect.Float64:
+		value.Set(reflect.ValueOf(v.Float64Slice([]float64{}, ",")))
+	case reflect.Complex64:
+		value.Set(reflect.ValueOf(v.Complex64Slice([]complex64{}, ",")))
+	case reflect.Complex128:
+		value.Set(reflect.ValueOf(v.Complex128Slice([]complex128{}, ",")))
+	}
 }

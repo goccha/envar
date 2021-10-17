@@ -2,7 +2,7 @@
 [![test](https://github.com/goccha/envar/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/goccha/envar/actions/workflows/test.yml)
 A simple library that handles environment variables
 
-## The simplest way
+## simplest way
 
 ```go
 var host = envar.String("DB_HOST")

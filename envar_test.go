@@ -3,6 +3,7 @@ package envar
 import (
 	"github.com/stretchr/testify/assert"
 	"os"
+	"reflect"
 	"testing"
 	"time"
 )
@@ -185,9 +186,9 @@ func TestString(t *testing.T) {
 	assert.NotEqual(t, "test", Get("TEST_STRING_PROD").String("prod"))
 }
 
-func TestEnv_Split(t *testing.T) {
+func TestSplit(t *testing.T) {
 	_ = os.Setenv("TEST_STRING_ARRAY", "test,test1, test2,  test3")
-	a := Get("TEST_STRING_ARRAY").Split("", ",")
+	a := Split("TEST_STRING_ARRAY")
 	assert.Equal(t, 4, len(a))
 	for i, v := range a {
 		switch i {
@@ -237,6 +238,116 @@ func TestEnv_Split_MultiSpace(t *testing.T) {
 	}
 }
 
+func TestIntSlice(t *testing.T) {
+	_ = os.Setenv("TEST_INT_SLICE", "1,2,3,4,5")
+	expected := []int{1, 2, 3, 4, 5}
+	value := IntSlice("TEST_INT_SLICE")
+	assert.Equal(t, true, reflect.DeepEqual(expected, value))
+}
+
+func TestInt8Slice(t *testing.T) {
+	_ = os.Setenv("TEST_INT8_SLICE", "1,2,3,4,5")
+	expected := []int8{1, 2, 3, 4, 5}
+	value := Int8Slice("TEST_INT8_SLICE")
+	assert.Equal(t, true, reflect.DeepEqual(expected, value))
+}
+
+func TestInt16Slice(t *testing.T) {
+	envName := "TEST_INT16_SLICE"
+	_ = os.Setenv(envName, "1,2,3,4,5")
+	expected := []int16{1, 2, 3, 4, 5}
+	value := Int16Slice(envName)
+	assert.Equal(t, true, reflect.DeepEqual(expected, value))
+}
+
+func TestInt32Slice(t *testing.T) {
+	envName := "TEST_INT32_SLICE"
+	_ = os.Setenv(envName, "1,2,3,4,5")
+	expected := []int32{1, 2, 3, 4, 5}
+	value := Int32Slice(envName)
+	assert.Equal(t, true, reflect.DeepEqual(expected, value))
+}
+
+func TestInt64Slice(t *testing.T) {
+	envName := "TEST_INT64_SLICE"
+	_ = os.Setenv(envName, "1,2,3,4,5")
+	expected := []int64{1, 2, 3, 4, 5}
+	value := Int64Slice(envName)
+	assert.Equal(t, true, reflect.DeepEqual(expected, value))
+}
+
+func TestUintSlice(t *testing.T) {
+	envName := "TEST_UINT_SLICE"
+	_ = os.Setenv(envName, "1,2,3,4,5")
+	expected := []uint{1, 2, 3, 4, 5}
+	value := UintSlice(envName)
+	assert.Equal(t, true, reflect.DeepEqual(expected, value))
+}
+
+func TestUint8Slice(t *testing.T) {
+	envName := "TEST_UINT8_SLICE"
+	_ = os.Setenv(envName, "1,2,3,4,5")
+	expected := []uint8{1, 2, 3, 4, 5}
+	value := Uint8Slice(envName)
+	assert.Equal(t, true, reflect.DeepEqual(expected, value))
+}
+
+func TestUint16Slice(t *testing.T) {
+	envName := "TEST_UINT16_SLICE"
+	_ = os.Setenv(envName, "1,2,3,4,5")
+	expected := []uint16{1, 2, 3, 4, 5}
+	value := Uint16Slice(envName)
+	assert.Equal(t, true, reflect.DeepEqual(expected, value))
+}
+
+func TestUint32Slice(t *testing.T) {
+	envName := "TEST_UINT32_SLICE"
+	_ = os.Setenv(envName, "1,2,3,4,5")
+	expected := []uint32{1, 2, 3, 4, 5}
+	value := Uint32Slice(envName)
+	assert.Equal(t, true, reflect.DeepEqual(expected, value))
+}
+
+func TestUint64Slice(t *testing.T) {
+	envName := "TEST_UINT64_SLICE"
+	_ = os.Setenv(envName, "1,2,3,4,5")
+	expected := []uint64{1, 2, 3, 4, 5}
+	value := Uint64Slice(envName)
+	assert.Equal(t, true, reflect.DeepEqual(expected, value))
+}
+
+func TestFloat32Slice(t *testing.T) {
+	envName := "TEST_FLOAT32_SLICE"
+	_ = os.Setenv(envName, "1,2,3,4,5")
+	expected := []float32{1, 2, 3, 4, 5}
+	value := Float32Slice(envName)
+	assert.Equal(t, true, reflect.DeepEqual(expected, value))
+}
+
+func TestFloat64Slice(t *testing.T) {
+	envName := "TEST_FLOAT64_SLICE"
+	_ = os.Setenv(envName, "1,2,3,4,5")
+	expected := []float64{1, 2, 3, 4, 5}
+	value := Float64Slice(envName)
+	assert.Equal(t, true, reflect.DeepEqual(expected, value))
+}
+
+func TestComplex64Slice(t *testing.T) {
+	envName := "TEST_COMPLEX64_SLICE"
+	_ = os.Setenv(envName, "1,2,3,4,5")
+	expected := []complex64{1, 2, 3, 4, 5}
+	value := Complex64Slice(envName)
+	assert.Equal(t, true, reflect.DeepEqual(expected, value))
+}
+
+func TestComplex128Slice(t *testing.T) {
+	envName := "TEST_COMPLEX128_SLICE"
+	_ = os.Setenv(envName, "1,2,3,4,5")
+	expected := []complex128{1, 2, 3, 4, 5}
+	value := Complex128Slice(envName)
+	assert.Equal(t, true, reflect.DeepEqual(expected, value))
+}
+
 func TestDuration(t *testing.T) {
 	_ = os.Setenv("TEST_DURATION_1", "1m")
 	expected := 1 * time.Minute
@@ -247,6 +358,28 @@ func TestDuration(t *testing.T) {
 	_ = os.Setenv("TEST_DURATION_1", "zero")
 	assert.Equal(t, value, Get("TEST_DURATION_1").Duration(value))
 	assert.NotEqual(t, expected, Get("TEST_DURATION_1").Duration(value))
+}
+
+func TestHas(t *testing.T) {
+	envName := "TEST_HAS"
+	_ = os.Setenv(envName, "exist")
+	assert.Equal(t, true, Has(envName))
+	_ = os.Unsetenv(envName)
+	assert.Equal(t, false, Has(envName))
+}
+
+func TestToUpper(t *testing.T) {
+	envName := "TEST_TO_UPPER"
+	_ = os.Setenv(envName, "upper")
+	expected := "UPPER"
+	assert.Equal(t, expected, ToUpper(envName))
+}
+
+func TestToLower(t *testing.T) {
+	envName := "TEST_TO_LOWER"
+	_ = os.Setenv(envName, "LOWER")
+	expected := "lower"
+	assert.Equal(t, expected, ToLower(envName))
 }
 
 func TestGetHostname(t *testing.T) {
