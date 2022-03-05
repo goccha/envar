@@ -193,6 +193,34 @@ func (e Env) Complex128(defaultValue complex128) complex128 {
 	}
 	return defaultValue
 }
+func (e Env) Writer(defaultValue string) *os.File {
+	value := defaultValue
+	if e.value != "" {
+		value = e.value
+	}
+	if value != "" {
+		if f, err := os.Create(value); err != nil {
+			log.Warn("%+v", err)
+		} else {
+			return f
+		}
+	}
+	return os.Stdout
+}
+func (e Env) Reader(defaultValue string) *os.File {
+	value := defaultValue
+	if e.value != "" {
+		value = e.value
+	}
+	if value != "" {
+		if f, err := os.Open(value); err != nil {
+			log.Warn("%+v", err)
+		} else {
+			return f
+		}
+	}
+	return os.Stdin
+}
 func (e Env) String(defaultValue string) string {
 	if e.value != "" {
 		return e.value

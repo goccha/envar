@@ -2,6 +2,7 @@ package envar
 
 import (
 	"github.com/stretchr/testify/assert"
+	"io"
 	"os"
 	"testing"
 	"time"
@@ -24,6 +25,8 @@ type TestStruct struct {
 	Uint64s     []uint64      `envar:"TEST_UINT64_ARRAY;default=1,2"`
 	Complex64s  []complex64   `envar:"TEST_COMPLEX64_ARRAY;default=1,2"`
 	Complex128s []complex128  `envar:"TEST_COMPLEX128_ARRAY;default=1,2"`
+	WriteFile   *os.File      `envar:"TEST_FILE;default=test.txt"`
+	ReadFile    io.Reader     `envar:"TEST_READER;default=test.txt"`
 }
 
 func Test_Bind(t *testing.T) {
@@ -33,4 +36,10 @@ func Test_Bind(t *testing.T) {
 		t.Fatalf("%v", err)
 	}
 	assert.Equal(t, "testName", v.Name)
+	_ = v.WriteFile.Close()
+	if closer, ok := v.ReadFile.(io.Closer); ok {
+		_ = closer.Close()
+	}
+	err := os.Remove("test.txt")
+	assert.NoError(t, err)
 }

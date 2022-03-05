@@ -116,6 +116,20 @@ func setValue(field reflect.StructField, value reflect.Value, names []string, de
 		value.Set(reflect.ValueOf(v.String("")))
 	case reflect.Slice:
 		setSlice(field.Type.Elem().Kind(), value, v)
+	case reflect.Ptr:
+		name := field.Type.Elem().Name()
+		switch name {
+		case "File":
+			value.Set(reflect.ValueOf(v.Writer("")))
+		}
+	case reflect.Interface:
+		name := field.Type.Name()
+		switch name {
+		case "Reader":
+			value.Set(reflect.ValueOf(v.Reader("")))
+		case "Writer":
+			value.Set(reflect.ValueOf(v.Writer("")))
+		}
 	}
 	return nil
 }
