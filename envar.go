@@ -10,7 +10,7 @@ import (
 
 func Get(names ...string) Env {
 	for _, name := range names {
-		name = strings.Trim(name, " ")
+		name = strings.TrimSpace(name)
 		v, ok := os.LookupEnv(name)
 		if ok {
 			return Env{Name: name, value: v}
@@ -604,6 +604,14 @@ func Complex128(names ...string) complex128 {
 
 func Complex128Slice(names ...string) []complex128 {
 	return Get(names...).Complex128Slice([]complex128{}, ",")
+}
+
+func Writer(names ...string) *os.File {
+	return Get(names...).Writer("")
+}
+
+func Reader(names ...string) *os.File {
+	return Get(names...).Reader("")
 }
 
 func Duration(names ...string) time.Duration {
