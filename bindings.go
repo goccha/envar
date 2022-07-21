@@ -49,18 +49,30 @@ func bindStruct(value reflect.Value) error {
 
 func bindField(field reflect.StructField, value reflect.Value) error {
 	if v, ok := field.Tag.Lookup("envar"); ok {
-		options := strings.Split(v, ";")
+		options := strings.SplitAfter(v, ";")
 		var defaultValue string
 		var names []string
-		for _, v := range options {
-			v = strings.Trim(v, " ")
-			if strings.HasPrefix(v, "default") {
-				if i := strings.Index(v, "="); i > 0 {
-					defaultValue = strings.Trim(v[i+1:], " ")
+		last := len(options) - 1
+		for i := 0; i <= last; i++ {
+			val := options[i]
+			if strings.HasSuffix(val, "\\;") {
+				if i < last {
+					i++
+					val = val[0:len(val)-2] + ";" + options[i]
+				} else {
+					val = val[0:len(val)-2] + ";"
+				}
+			} else {
+				val = strings.TrimSuffix(val, ";")
+			}
+			val = strings.TrimSpace(val)
+			if strings.HasPrefix(val, "default") {
+				if index := strings.Index(val, "="); index > 0 {
+					defaultValue = strings.TrimSpace(val[index+1:])
 					continue
 				}
 			}
-			names = strings.Split(v, ",")
+			names = strings.Split(val, ",")
 		}
 		if err := setValue(field, value, names, defaultValue); err != nil {
 			return err

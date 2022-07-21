@@ -10,6 +10,7 @@ import (
 
 type TestStruct struct {
 	Name        string        `envar:" TEST_1 ,TEST_2; default=TEST"`
+	UserAgent   string        `envar:"USER_AGENT; default=Mozilla/5.0 (iPhone\\; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) GSA/205.1.437312666 Mobile/15E148 Safari/604.1"`
 	Expiration  time.Duration `envar:"EXPIRATION;default=10h"`
 	Value       int64         `envar:"TEST_INT64;default=99"`
 	Values      []string      `envar:"TEST_SLICE;default=test1,test2"`
@@ -36,6 +37,24 @@ func Test_Bind(t *testing.T) {
 		t.Fatalf("%v", err)
 	}
 	assert.Equal(t, "testName", v.Name)
+	assert.Equal(t, "Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) GSA/205.1.437312666 Mobile/15E148 Safari/604.1", v.UserAgent)
+	expect, _ := time.ParseDuration("10h")
+	assert.Equal(t, expect, v.Expiration)
+	assert.Equal(t, int64(99), v.Value)
+	assert.Equal(t, []string{"test1", "test2"}, v.Values)
+	assert.Equal(t, []int{1, 2}, v.Nums)
+	assert.Equal(t, []int8{1, 2}, v.Int8s)
+	assert.Equal(t, []int16{1, 2}, v.Int16s)
+	assert.Equal(t, []int32{1, 2}, v.Int32s)
+	assert.Equal(t, []int64{1, 2}, v.Int64s)
+	assert.Equal(t, []uint{1, 2}, v.Uints)
+	assert.Equal(t, []uint8{1, 2}, v.Uint8s)
+	assert.Equal(t, []uint16{1, 2}, v.Uint16s)
+	assert.Equal(t, []uint32{1, 2}, v.Uint32s)
+	assert.Equal(t, []uint64{1, 2}, v.Uint64s)
+	assert.Equal(t, []complex64{1, 2}, v.Complex64s)
+	assert.Equal(t, []complex128{1, 2}, v.Complex128s)
+
 	_ = v.WriteFile.Close()
 	if closer, ok := v.ReadFile.(io.Closer); ok {
 		_ = closer.Close()
