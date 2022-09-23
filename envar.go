@@ -1,11 +1,12 @@
 package envar
 
 import (
-	"github.com/goccha/log"
 	"os"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/goccha/log"
 )
 
 func Get(names ...string) Env {
@@ -227,6 +228,12 @@ func (e Env) String(defaultValue string) string {
 	}
 	return defaultValue
 }
+func (e Env) Bytes(defaultValue string) []byte {
+	if e.value != "" {
+		return []byte(e.value)
+	}
+	return []byte(defaultValue)
+}
 func (e Env) Split(defaultValue, sep string) []string {
 	a := strings.Split(e.String(defaultValue), sep)
 	if strings.Contains(sep, " ") {
@@ -243,6 +250,22 @@ func (e Env) Split(defaultValue, sep string) []string {
 		a[i] = strings.TrimSpace(a[i])
 	}
 	return a
+}
+func (e Env) ByteSlice(defaultValue []byte, sep string) []byte {
+	a := e.Split("", sep)
+	if len(a) == 0 {
+		return defaultValue
+	}
+	e.String("")
+	array := make([]byte, 0, len(a))
+	for i, s := range a {
+		if v, err := strconv.ParseUint(s, 10, 8); err != nil {
+			log.Warn("[%d]:%v", i, err)
+		} else {
+			array = append(array, byte(v))
+		}
+	}
+	return array
 }
 func (e Env) IntSlice(defaultValue []int, sep string) []int {
 	a := e.Split("", sep)

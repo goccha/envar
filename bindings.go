@@ -2,11 +2,14 @@ package envar
 
 import (
 	"errors"
-	"github.com/go-playground/validator/v10"
-	"github.com/goccha/log"
 	"reflect"
 	"strings"
+
+	"github.com/go-playground/validator/v10"
+	"github.com/goccha/log"
 )
+
+type Bytes []byte
 
 var validate *validator.Validate
 
@@ -127,7 +130,11 @@ func setValue(field reflect.StructField, value reflect.Value, names []string, de
 	case reflect.String:
 		value.Set(reflect.ValueOf(v.String("")))
 	case reflect.Slice:
-		setSlice(field.Type.Elem().Kind(), value, v)
+		if field.Type.Name() == "Bytes" {
+			value.Set(reflect.ValueOf(v.Bytes("")))
+		} else {
+			setSlice(field.Type.Elem().Kind(), value, v)
+		}
 	case reflect.Ptr:
 		name := field.Type.Elem().Name()
 		switch name {
