@@ -9,6 +9,7 @@ on:
       - opened
     paths:
       - '**.go'
+  workflow_dispatch:
 
 jobs:
   go-test:
