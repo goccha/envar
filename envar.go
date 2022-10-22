@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/goccha/log"
+	"github.com/goccha/envar/pkg/log"
 )
 
 func Get(names ...string) Env {

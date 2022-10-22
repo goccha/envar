@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/go-playground/validator/v10"
-	"github.com/goccha/log"
+	"github.com/goccha/envar/pkg/log"
 )
 
 type Bytes []byte
