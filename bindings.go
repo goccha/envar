@@ -140,6 +140,8 @@ func setValue(field reflect.StructField, value reflect.Value, names []string, de
 		switch name {
 		case "File":
 			value.Set(reflect.ValueOf(v.Writer("")))
+		default:
+			setPtr(field.Type.Elem().Kind(), value, v)
 		}
 	case reflect.Interface:
 		name := field.Type.Name()
@@ -149,6 +151,8 @@ func setValue(field reflect.StructField, value reflect.Value, names []string, de
 		case "Writer":
 			value.Set(reflect.ValueOf(v.Writer("")))
 		}
+	default:
+		// ignore
 	}
 	return nil
 }
@@ -185,5 +189,44 @@ func setSlice(kind reflect.Kind, value reflect.Value, v Env) {
 		value.Set(reflect.ValueOf(v.Complex64Slice([]complex64{}, ",")))
 	case reflect.Complex128:
 		value.Set(reflect.ValueOf(v.Complex128Slice([]complex128{}, ",")))
+	default:
+		// ignore
+	}
+}
+
+func setPtr(kind reflect.Kind, value reflect.Value, v Env) {
+	switch kind {
+	case reflect.String:
+		value.Set(reflect.ValueOf(v.StringP("")))
+	case reflect.Int:
+		value.Set(reflect.ValueOf(v.IntP(0)))
+	case reflect.Int8:
+		value.Set(reflect.ValueOf(v.Int8P(0)))
+	case reflect.Int16:
+		value.Set(reflect.ValueOf(v.Int16P(0)))
+	case reflect.Int32:
+		value.Set(reflect.ValueOf(v.Int32P(0)))
+	case reflect.Int64:
+		value.Set(reflect.ValueOf(v.Int64P(0)))
+	case reflect.Uint:
+		value.Set(reflect.ValueOf(v.UintP(0)))
+	case reflect.Uint8:
+		value.Set(reflect.ValueOf(v.Uint8P(0)))
+	case reflect.Uint16:
+		value.Set(reflect.ValueOf(v.Uint16P(0)))
+	case reflect.Uint32:
+		value.Set(reflect.ValueOf(v.Uint32P(0)))
+	case reflect.Uint64:
+		value.Set(reflect.ValueOf(v.Uint64P(0)))
+	case reflect.Float32:
+		value.Set(reflect.ValueOf(v.Float32P(0)))
+	case reflect.Float64:
+		value.Set(reflect.ValueOf(v.Float64P(0)))
+	case reflect.Complex64:
+		value.Set(reflect.ValueOf(v.Complex64P(0)))
+	case reflect.Complex128:
+		value.Set(reflect.ValueOf(v.Complex128P(0)))
+	default:
+		// ignore
 	}
 }

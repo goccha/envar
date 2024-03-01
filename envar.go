@@ -40,6 +40,13 @@ func (e Env) Bool(defaultValue bool) bool {
 	}
 	return defaultValue
 }
+func (e Env) BoolP(defaultValue bool) *bool {
+	if e.Has() || e.value != "" {
+		v := e.Bool(defaultValue)
+		return &v
+	}
+	return nil
+}
 func (e Env) Int(defaultValue int) int {
 	if e.value != "" {
 		i, err := strconv.Atoi(e.value)
@@ -50,6 +57,13 @@ func (e Env) Int(defaultValue int) int {
 		return i
 	}
 	return defaultValue
+}
+func (e Env) IntP(defaultValue int) *int {
+	if e.Has() || e.value != "" {
+		v := e.Int(defaultValue)
+		return &v
+	}
+	return nil
 }
 func (e Env) Int8(defaultValue int8) int8 {
 	if e.value != "" {
@@ -62,6 +76,13 @@ func (e Env) Int8(defaultValue int8) int8 {
 	}
 	return defaultValue
 }
+func (e Env) Int8P(defaultValue int8) *int8 {
+	if e.Has() || e.value != "" {
+		v := e.Int8(defaultValue)
+		return &v
+	}
+	return nil
+}
 func (e Env) Int16(defaultValue int16) int16 {
 	if e.value != "" {
 		i, err := strconv.Atoi(e.value)
@@ -72,6 +93,13 @@ func (e Env) Int16(defaultValue int16) int16 {
 		return int16(i)
 	}
 	return defaultValue
+}
+func (e Env) Int16P(defaultValue int16) *int16 {
+	if e.Has() || e.value != "" {
+		v := e.Int16(defaultValue)
+		return &v
+	}
+	return nil
 }
 func (e Env) Int32(defaultValue int32) int32 {
 	if e.value != "" {
@@ -84,6 +112,13 @@ func (e Env) Int32(defaultValue int32) int32 {
 	}
 	return defaultValue
 }
+func (e Env) Int32P(defaultValue int32) *int32 {
+	if e.Has() || e.value != "" {
+		v := e.Int32(defaultValue)
+		return &v
+	}
+	return nil
+}
 func (e Env) Int64(defaultValue int64) int64 {
 	if e.value != "" {
 		i, err := strconv.Atoi(e.value)
@@ -94,6 +129,13 @@ func (e Env) Int64(defaultValue int64) int64 {
 		return int64(i)
 	}
 	return defaultValue
+}
+func (e Env) Int64P(defaultValue int64) *int64 {
+	if e.Has() || e.value != "" {
+		v := e.Int64(defaultValue)
+		return &v
+	}
+	return nil
 }
 func (e Env) Uint(defaultValue uint) uint {
 	if e.value != "" {
@@ -106,6 +148,13 @@ func (e Env) Uint(defaultValue uint) uint {
 	}
 	return defaultValue
 }
+func (e Env) UintP(defaultValue uint) *uint {
+	if e.Has() || e.value != "" {
+		v := e.Uint(defaultValue)
+		return &v
+	}
+	return nil
+}
 func (e Env) Uint8(defaultValue uint8) uint8 {
 	if e.value != "" {
 		i, err := strconv.Atoi(e.value)
@@ -116,6 +165,13 @@ func (e Env) Uint8(defaultValue uint8) uint8 {
 		return uint8(i)
 	}
 	return defaultValue
+}
+func (e Env) Uint8P(defaultValue uint8) *uint8 {
+	if e.Has() || e.value != "" {
+		v := e.Uint8(defaultValue)
+		return &v
+	}
+	return nil
 }
 func (e Env) Uint16(defaultValue uint16) uint16 {
 	if e.value != "" {
@@ -128,6 +184,13 @@ func (e Env) Uint16(defaultValue uint16) uint16 {
 	}
 	return defaultValue
 }
+func (e Env) Uint16P(defaultValue uint16) *uint16 {
+	if e.Has() || e.value != "" {
+		v := e.Uint16(defaultValue)
+		return &v
+	}
+	return nil
+}
 func (e Env) Uint32(defaultValue uint32) uint32 {
 	if e.value != "" {
 		i, err := strconv.Atoi(e.value)
@@ -138,6 +201,13 @@ func (e Env) Uint32(defaultValue uint32) uint32 {
 		return uint32(i)
 	}
 	return defaultValue
+}
+func (e Env) Uint32P(defaultValue uint32) *uint32 {
+	if e.Has() || e.value != "" {
+		v := e.Uint32(defaultValue)
+		return &v
+	}
+	return nil
 }
 func (e Env) Uint64(defaultValue uint64) uint64 {
 	if e.value != "" {
@@ -150,6 +220,13 @@ func (e Env) Uint64(defaultValue uint64) uint64 {
 	}
 	return defaultValue
 }
+func (e Env) Uint64P(defaultValue uint64) *uint64 {
+	if e.Has() || e.value != "" {
+		v := e.Uint64(defaultValue)
+		return &v
+	}
+	return nil
+}
 func (e Env) Float32(defaultValue float32) float32 {
 	if e.value != "" {
 		value, err := strconv.ParseFloat(e.value, 32)
@@ -160,6 +237,13 @@ func (e Env) Float32(defaultValue float32) float32 {
 		return float32(value)
 	}
 	return defaultValue
+}
+func (e Env) Float32P(defaultValue float32) *float32 {
+	if e.Has() || e.value != "" {
+		v := e.Float32(defaultValue)
+		return &v
+	}
+	return nil
 }
 func (e Env) Float64(defaultValue float64) float64 {
 	if e.value != "" {
@@ -172,6 +256,13 @@ func (e Env) Float64(defaultValue float64) float64 {
 	}
 	return defaultValue
 }
+func (e Env) Float64P(defaultValue float64) *float64 {
+	if e.Has() || e.value != "" {
+		v := e.Float64(defaultValue)
+		return &v
+	}
+	return nil
+}
 func (e Env) Complex64(defaultValue complex64) complex64 {
 	if e.value != "" {
 		value, err := strconv.ParseComplex(e.value, 64)
@@ -183,6 +274,13 @@ func (e Env) Complex64(defaultValue complex64) complex64 {
 	}
 	return defaultValue
 }
+func (e Env) Complex64P(defaultValue complex64) *complex64 {
+	if e.Has() || e.value != "" {
+		v := e.Complex64(defaultValue)
+		return &v
+	}
+	return nil
+}
 func (e Env) Complex128(defaultValue complex128) complex128 {
 	if e.value != "" {
 		value, err := strconv.ParseComplex(e.value, 128)
@@ -193,6 +291,13 @@ func (e Env) Complex128(defaultValue complex128) complex128 {
 		return value
 	}
 	return defaultValue
+}
+func (e Env) Complex128P(defaultValue complex128) *complex128 {
+	if e.Has() || e.value != "" {
+		v := e.Complex128(defaultValue)
+		return &v
+	}
+	return nil
 }
 func (e Env) Writer(defaultValue string) *os.File {
 	value := defaultValue
@@ -228,6 +333,13 @@ func (e Env) String(defaultValue string) string {
 	}
 	return defaultValue
 }
+func (e Env) StringP(defaultValue string) *string {
+	if e.Has() || e.value != "" {
+		v := e.String(defaultValue)
+		return &v
+	}
+	return nil
+}
 func (e Env) Bytes(defaultValue string) []byte {
 	if e.value != "" {
 		return []byte(e.value)
@@ -256,7 +368,6 @@ func (e Env) ByteSlice(defaultValue []byte, sep string) []byte {
 	if len(a) == 0 {
 		return defaultValue
 	}
-	e.String("")
 	array := make([]byte, 0, len(a))
 	for i, s := range a {
 		if v, err := strconv.ParseUint(s, 10, 8); err != nil {
@@ -500,9 +611,15 @@ func Has(names ...string) bool {
 func Bool(names ...string) bool {
 	return Get(names...).Bool(false)
 }
+func BoolP(names ...string) *bool {
+	return Get(names...).BoolP(false)
+}
 
 func String(names ...string) string {
 	return Get(names...).String("")
+}
+func StringP(names ...string) *string {
+	return Get(names...).StringP("")
 }
 
 func Split(names ...string) []string {
@@ -520,6 +637,9 @@ func ToLower(names ...string) string {
 func Int(names ...string) int {
 	return Get(names...).Int(0)
 }
+func IntP(names ...string) *int {
+	return Get(names...).IntP(0)
+}
 
 func IntSlice(names ...string) []int {
 	return Get(names...).IntSlice([]int{}, ",")
@@ -527,6 +647,9 @@ func IntSlice(names ...string) []int {
 
 func Int8(names ...string) int8 {
 	return Get(names...).Int8(0)
+}
+func Int8P(names ...string) *int8 {
+	return Get(names...).Int8P(0)
 }
 
 func Int8Slice(names ...string) []int8 {
@@ -536,6 +659,9 @@ func Int8Slice(names ...string) []int8 {
 func Int16(names ...string) int16 {
 	return Get(names...).Int16(0)
 }
+func Int16P(names ...string) *int16 {
+	return Get(names...).Int16P(0)
+}
 
 func Int16Slice(names ...string) []int16 {
 	return Get(names...).Int16Slice([]int16{}, ",")
@@ -543,6 +669,9 @@ func Int16Slice(names ...string) []int16 {
 
 func Int32(names ...string) int32 {
 	return Get(names...).Int32(0)
+}
+func Int32P(names ...string) *int32 {
+	return Get(names...).Int32P(0)
 }
 
 func Int32Slice(names ...string) []int32 {
@@ -552,6 +681,9 @@ func Int32Slice(names ...string) []int32 {
 func Int64(names ...string) int64 {
 	return Get(names...).Int64(0)
 }
+func Int64P(names ...string) *int64 {
+	return Get(names...).Int64P(0)
+}
 
 func Int64Slice(names ...string) []int64 {
 	return Get(names...).Int64Slice([]int64{}, ",")
@@ -559,6 +691,9 @@ func Int64Slice(names ...string) []int64 {
 
 func Uint(names ...string) uint {
 	return Get(names...).Uint(0)
+}
+func UintP(names ...string) *uint {
+	return Get(names...).UintP(0)
 }
 
 func UintSlice(names ...string) []uint {
@@ -568,6 +703,9 @@ func UintSlice(names ...string) []uint {
 func Uint8(names ...string) uint8 {
 	return Get(names...).Uint8(0)
 }
+func Uint8P(names ...string) *uint8 {
+	return Get(names...).Uint8P(0)
+}
 
 func Uint8Slice(names ...string) []uint8 {
 	return Get(names...).Uint8Slice([]uint8{}, ",")
@@ -575,6 +713,9 @@ func Uint8Slice(names ...string) []uint8 {
 
 func Uint16(names ...string) uint16 {
 	return Get(names...).Uint16(0)
+}
+func Uint16P(names ...string) *uint16 {
+	return Get(names...).Uint16P(0)
 }
 
 func Uint16Slice(names ...string) []uint16 {
@@ -584,6 +725,9 @@ func Uint16Slice(names ...string) []uint16 {
 func Uint32(names ...string) uint32 {
 	return Get(names...).Uint32(0)
 }
+func Uint32P(names ...string) *uint32 {
+	return Get(names...).Uint32P(0)
+}
 
 func Uint32Slice(names ...string) []uint32 {
 	return Get(names...).Uint32Slice([]uint32{}, ",")
@@ -591,6 +735,9 @@ func Uint32Slice(names ...string) []uint32 {
 
 func Uint64(names ...string) uint64 {
 	return Get(names...).Uint64(0)
+}
+func Uint64P(names ...string) *uint64 {
+	return Get(names...).Uint64P(0)
 }
 
 func Uint64Slice(names ...string) []uint64 {
@@ -600,6 +747,9 @@ func Uint64Slice(names ...string) []uint64 {
 func Float32(names ...string) float32 {
 	return Get(names...).Float32(0)
 }
+func Float32P(names ...string) *float32 {
+	return Get(names...).Float32P(0)
+}
 
 func Float32Slice(names ...string) []float32 {
 	return Get(names...).Float32Slice([]float32{}, ",")
@@ -607,6 +757,9 @@ func Float32Slice(names ...string) []float32 {
 
 func Float64(names ...string) float64 {
 	return Get(names...).Float64(0)
+}
+func Float64P(names ...string) *float64 {
+	return Get(names...).Float64P(0)
 }
 
 func Float64Slice(names ...string) []float64 {
@@ -616,6 +769,9 @@ func Float64Slice(names ...string) []float64 {
 func Complex64(names ...string) complex64 {
 	return Get(names...).Complex64(0)
 }
+func Complex64P(names ...string) *complex64 {
+	return Get(names...).Complex64P(0)
+}
 
 func Complex64Slice(names ...string) []complex64 {
 	return Get(names...).Complex64Slice([]complex64{}, ",")
@@ -623,6 +779,9 @@ func Complex64Slice(names ...string) []complex64 {
 
 func Complex128(names ...string) complex128 {
 	return Get(names...).Complex128(0)
+}
+func Complex128P(names ...string) *complex128 {
+	return Get(names...).Complex128P(0)
 }
 
 func Complex128Slice(names ...string) []complex128 {

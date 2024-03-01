@@ -31,6 +31,9 @@ type TestStruct struct {
 	Complex128s []complex128  `envar:"TEST_COMPLEX128_ARRAY;default=1,2"`
 	WriteFile   *os.File      `envar:"TEST_FILE;default=test.txt"`
 	ReadFile    io.Reader     `envar:"TEST_READER;default=test.txt"`
+	NameP       *string       `envar:" TEST_1 ,TEST_2; default=TEST"`
+	ValueP      *int64        `envar:"TEST_INT64;default=99"`
+	IntP        *int          `envar:"TEST_INT"`
 }
 
 func Test_Bind(t *testing.T) {
@@ -59,6 +62,9 @@ func Test_Bind(t *testing.T) {
 	assert.Equal(t, []uint64{1, 2}, v.Uint64s)
 	assert.Equal(t, []complex64{1, 2}, v.Complex64s)
 	assert.Equal(t, []complex128{1, 2}, v.Complex128s)
+	assert.Equal(t, "testName", *v.NameP)
+	assert.Equal(t, int64(99), *v.ValueP)
+	assert.Nil(t, v.IntP)
 
 	_ = v.WriteFile.Close()
 	if closer, ok := v.ReadFile.(io.Closer); ok {
