@@ -9,12 +9,16 @@ import (
 	"github.com/goccha/envar/pkg/log"
 )
 
+const DefaultEnvName = "DEPLOY_ENV"
+
+var EnvName = DefaultEnvName
+
 func Get(names ...string) Env {
 	for _, name := range names {
 		name = strings.TrimSpace(name)
 		v, ok := os.LookupEnv(name)
 		if ok {
-			return Env{Name: name, value: v}
+			return Env{Name: name, value: v, found: ok}
 		}
 	}
 	return Env{}
@@ -23,10 +27,11 @@ func Get(names ...string) Env {
 type Env struct {
 	Name  string
 	value string
+	found bool
 }
 
 func (e Env) Has() bool {
-	return e.Name != ""
+	return e.found
 }
 
 func (e Env) Bool(defaultValue bool) bool {

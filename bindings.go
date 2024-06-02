@@ -2,6 +2,7 @@ package envar
 
 import (
 	"errors"
+	"github.com/stoewer/go-strcase"
 	"reflect"
 	"strings"
 
@@ -11,26 +12,44 @@ import (
 
 type Bytes []byte
 
-var validate *validator.Validate
-
-func SetValidator(validator *validator.Validate) {
-	validate = validator
+type option struct {
+	prefix    string
+	validator *validator.Validate
 }
 
-func Bind(value interface{}, validation ...bool) error {
+type Option func(*option)
+
+func WithValidation(v ...*validator.Validate) Option {
+	return func(o *option) {
+		if len(v) == 0 {
+			o.validator = validator.New()
+		} else {
+			o.validator = v[0]
+		}
+	}
+}
+
+func WithPrefix(prefix string) Option {
+	return func(o *option) {
+		o.prefix = prefix
+	}
+}
+
+func Bind(value interface{}, opts ...Option) error {
+	var o option
+	for _, opt := range opts {
+		opt(&o)
+	}
 	if v := reflect.ValueOf(value); v.Kind() != reflect.Ptr {
 		return errors.New("expected a pointer")
 	} else if v = v.Elem(); v.Kind() != reflect.Struct {
 		return errors.New("expected a struct")
 	} else {
-		if err := bindStruct(v); err != nil {
+		if err := bindStruct(o.prefix, v, GetDeployEnv().String()); err != nil {
 			return err
 		}
-		if len(validation) > 0 && validation[0] {
-			if validate == nil {
-				validate = validator.New()
-			}
-			if err := validate.Struct(value); err != nil {
+		if o.validator != nil {
+			if err := o.validator.Struct(value); err != nil {
 				return err
 			}
 		}
@@ -38,23 +57,23 @@ func Bind(value interface{}, validation ...bool) error {
 	}
 }
 
-func bindStruct(value reflect.Value) error {
+func bindStruct(prefix string, value reflect.Value, _env string) error {
 	var refType = value.Type()
 	for i := 0; i < refType.NumField(); i++ {
 		field := refType.Field(i)
 		v := value.Field(i)
-		if err := bindField(field, v); err != nil {
+		if err := bindField(prefix, field, v, _env); err != nil {
 			return err
 		}
 	}
 	return nil
 }
 
-func bindField(field reflect.StructField, value reflect.Value) error {
+func bindField(prefix string, field reflect.StructField, value reflect.Value, _env string) error {
+	var defaultValue string
+	var names []string
 	if v, ok := field.Tag.Lookup("envar"); ok {
 		options := strings.SplitAfter(v, ";")
-		var defaultValue string
-		var names []string
 		last := len(options) - 1
 		for i := 0; i <= last; i++ {
 			val := options[i]
@@ -69,6 +88,14 @@ func bindField(field reflect.StructField, value reflect.Value) error {
 				val = strings.TrimSuffix(val, ";")
 			}
 			val = strings.TrimSpace(val)
+			if _env != "" {
+				if strings.HasPrefix(val, _env) {
+					if index := strings.Index(val, "="); index > 0 {
+						defaultValue = strings.TrimSpace(val[index+1:])
+						continue
+					}
+				}
+			}
 			if strings.HasPrefix(val, "default") {
 				if index := strings.Index(val, "="); index > 0 {
 					defaultValue = strings.TrimSpace(val[index+1:])
@@ -77,6 +104,13 @@ func bindField(field reflect.StructField, value reflect.Value) error {
 			}
 			names = strings.Split(val, ",")
 		}
+	}
+	if len(names) == 0 && prefix != "" {
+		prefix = strings.ToUpper(strcase.SnakeCase(prefix))
+		name := prefix + "_" + strings.ToUpper(strcase.SnakeCase(field.Name))
+		names = []string{name}
+	}
+	if len(names) > 0 {
 		if err := setValue(field, value, names, defaultValue); err != nil {
 			return err
 		}

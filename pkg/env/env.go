@@ -2,89 +2,31 @@ package env
 
 import (
 	"github.com/goccha/envar"
-	"os"
-	"strings"
 )
 
-const PrefixDefine = "_DEFINE_DEPLOY_ENV_"
-
-func init() {
-	prefix := len(PrefixDefine)
-	for _, env := range os.Environ() {
-		if strings.HasPrefix(env, PrefixDefine) {
-			name := env[prefix:]
-			value := envar.Int(env)
-			NewDeployEnv(name, value)
-		}
-	}
-}
-
-type DeployEnv int
-
-var _nameMap = make(map[string]DeployEnv)
-var _valueMap = make(map[DeployEnv]string)
-
-func NewDeployEnv(name string, value int) DeployEnv {
-	name = strings.ToLower(name)
-	_nameMap[name] = DeployEnv(value)
-	_valueMap[DeployEnv(value)] = name
-	return DeployEnv(value)
+// DeployEnv represents the deployment environment.
+// Deprecated
+func NewDeployEnv(name string, value int) envar.DeployEnv {
+	return envar.NewDeployEnv(name, value)
 }
 
 const (
-	Production  DeployEnv = 10000
-	Demo        DeployEnv = 5000
-	Staging     DeployEnv = 3000
-	QA          DeployEnv = 2000
-	Development DeployEnv = 1000
-	Local       DeployEnv = 0
+	Production  = envar.Production
+	Demo        = envar.Demo
+	Staging     = envar.Staging
+	QA          = envar.QA
+	Development = envar.Development
+	Local       = envar.Local
 )
 
-func GetDeployEnv() DeployEnv {
-	v := envar.Get("DEPLOY_ENV").String("local")
-	return deploymentOf(v)
+// GetDeployEnv returns the current deployment environment.
+// Deprecated
+func GetDeployEnv() envar.DeployEnv {
+	return envar.GetDeployEnv()
 }
 
-func Is(deployEnv DeployEnv) bool {
+// Is returns true if the current deployment environment is greater than or equal to the specified deployment environment.
+// Deprecated
+func Is(deployEnv envar.DeployEnv) bool {
 	return GetDeployEnv() >= deployEnv
-}
-
-func deploymentOf(value string) DeployEnv {
-	value = strings.ToLower(value)
-	if v, ok := _nameMap[value]; ok {
-		return v
-	}
-	switch value {
-	case "development", "develop", "dev":
-		return Development
-	case "qa":
-		return QA
-	case "staging", "stg":
-		return Staging
-	case "demo":
-		return Demo
-	case "production", "prod":
-		return Production
-	default:
-		return Local
-	}
-}
-func (d DeployEnv) String() string {
-	if v, ok := _valueMap[d]; ok {
-		return v
-	}
-	switch d {
-	case Development:
-		return "development"
-	case QA:
-		return "qa"
-	case Staging:
-		return "staging"
-	case Demo:
-		return "demo"
-	case Production:
-		return "production"
-	default:
-		return "local"
-	}
 }
