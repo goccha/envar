@@ -102,7 +102,9 @@ func bindField(prefix string, field reflect.StructField, value reflect.Value, _e
 					continue
 				}
 			}
-			names = strings.Split(val, ",")
+			if !strings.Contains(val, "=") {
+				names = strings.Split(val, ",")
+			}
 		}
 	}
 	if len(names) == 0 && prefix != "" {

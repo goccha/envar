@@ -35,6 +35,7 @@ type TestStruct struct {
 	ValueP                *int64        `envar:"TEST_INT64;default=99"`
 	IntP                  *int          `envar:"TEST_INT"`
 	EnvValue              string        `envar:"ENV_VALUE;default=test;local=local-value;development=dev-value;qa=qa-value;staging=staging-value;demo=demo-value;production=production-value"`
+	EnvFixValue           string        `envar:"ENV_FIX_VALUE;default=test;local=local-value;development=dev-value;qa=qa-value;staging=staging-value;demo=demo-value;production=production-value"`
 	NoTag                 string
 	NoNameTag             string `envar:"default=NoNameTagValue"`
 	NoNameTagDefaultValue string `envar:"default=NoNameTagDefaultValue"`
@@ -43,6 +44,7 @@ type TestStruct struct {
 func Test_Bind(t *testing.T) {
 	_ = os.Setenv("TEST_1", "testName")
 	_ = os.Setenv(EnvName, "qa")
+	_ = os.Setenv("ENV_FIX_VALUE", "fix-value")
 	_ = os.Setenv("ENVAR_TEST_NO_TAG", "no-tag-value")
 	_ = os.Setenv("ENVAR_TEST_NO_NAME_TAG", "no-name-tag-value")
 
@@ -75,6 +77,7 @@ func Test_Bind(t *testing.T) {
 	assert.Equal(t, int64(99), *v.ValueP)
 	assert.Nil(t, v.IntP)
 	assert.Equal(t, "qa-value", v.EnvValue)
+	assert.Equal(t, "fix-value", v.EnvFixValue)
 	assert.Equal(t, "no-tag-value", v.NoTag)
 	assert.Equal(t, "no-name-tag-value", v.NoNameTag)
 	assert.Equal(t, "NoNameTagDefaultValue", v.NoNameTagDefaultValue)
