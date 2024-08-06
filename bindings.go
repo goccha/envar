@@ -89,23 +89,17 @@ func (b *binder) bindField(field reflect.StructField, value reflect.Value, _env 
 				val = strings.TrimSuffix(val, ";")
 			}
 			val = strings.TrimSpace(val)
-			if _env != "" {
-				if strings.HasPrefix(val, _env) {
-					if index := strings.Index(val, "="); index > 0 {
-						defaultValue = strings.TrimSpace(val[index+1:])
-						continue
-					}
-				}
-			}
-			if strings.HasPrefix(val, "default") {
-				if index := strings.Index(val, "="); index > 0 {
+			if index := strings.Index(val, "="); index > 0 {
+				prop := val[:index]
+				if _env == prop {
 					defaultValue = strings.TrimSpace(val[index+1:])
-					continue
 				}
+				if defaultValue == "" && prop == "default" {
+					defaultValue = strings.TrimSpace(val[index+1:])
+				}
+				continue
 			}
-			if !strings.Contains(val, "=") {
-				names = strings.Split(val, ",")
-			}
+			names = strings.Split(val, ",")
 		}
 	}
 	prefix := b.prefix
