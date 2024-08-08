@@ -98,4 +98,45 @@ func Test_Bind(t *testing.T) {
 	}
 	err := os.Remove("test.txt")
 	assert.NoError(t, err)
+
+	v = &TestStruct{}
+	if err := Bind(v); err != nil {
+		t.Fatalf("%v", err)
+	}
+	assert.Equal(t, "testName", v.Name)
+	assert.Equal(t, "Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) GSA/205.1.437312666 Mobile/15E148 Safari/604.1", v.UserAgent)
+	expect, _ = time.ParseDuration("10h")
+	assert.Equal(t, expect, v.Expiration)
+	assert.Equal(t, int64(99), v.Value)
+	assert.Equal(t, []string{"test1", "test2"}, v.Values)
+	assert.Equal(t, Bytes("test123"), v.Bytes)
+	assert.Equal(t, []byte{1, 2, 3}, v.ByteArray)
+	assert.Equal(t, []int{1, 2}, v.Nums)
+	assert.Equal(t, []int8{1, 2}, v.Int8s)
+	assert.Equal(t, []int16{1, 2}, v.Int16s)
+	assert.Equal(t, []int32{1, 2}, v.Int32s)
+	assert.Equal(t, []int64{1, 2}, v.Int64s)
+	assert.Equal(t, []uint{1, 2}, v.Uints)
+	assert.Equal(t, []uint8{1, 2}, v.Uint8s)
+	assert.Equal(t, []uint16{1, 2}, v.Uint16s)
+	assert.Equal(t, []uint32{1, 2}, v.Uint32s)
+	assert.Equal(t, []uint64{1, 2}, v.Uint64s)
+	assert.Equal(t, []complex64{1, 2}, v.Complex64s)
+	assert.Equal(t, []complex128{1, 2}, v.Complex128s)
+	assert.Equal(t, "testName", *v.NameP)
+	assert.Equal(t, int64(99), *v.ValueP)
+	assert.Nil(t, v.IntP)
+	assert.Equal(t, "qa-value", v.EnvValue)
+	assert.Equal(t, "fix-value", v.EnvFixValue)
+	assert.Equal(t, "env-production-value", v.EnvProductionValue)
+	assert.Equal(t, "", v.NoTag)
+	assert.Equal(t, "NoNameTagValue", v.NoNameTag)
+	assert.Equal(t, "NoNameTagDefaultValue", v.NoNameTagDefaultValue)
+	assert.Equal(t, "embedded-value", v.EmbeddedValue)
+	_ = v.WriteFile.Close()
+	if closer, ok := v.ReadFile.(io.Closer); ok {
+		_ = closer.Close()
+	}
+	err = os.Remove("test.txt")
+	assert.NoError(t, err)
 }

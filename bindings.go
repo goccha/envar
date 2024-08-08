@@ -73,6 +73,7 @@ func (b *binder) bindStruct(value reflect.Value, _env string) error {
 func (b *binder) bindField(field reflect.StructField, value reflect.Value, _env string) error {
 	var defaultValue string
 	var names []string
+	prefix := b.prefix
 	if v, ok := field.Tag.Lookup("envar"); ok {
 		options := strings.SplitAfter(v, ";")
 		last := len(options) - 1
@@ -102,11 +103,17 @@ func (b *binder) bindField(field reflect.StructField, value reflect.Value, _env 
 			names = strings.Split(val, ",")
 		}
 	}
-	prefix := b.prefix
-	if len(names) == 0 && prefix != "" {
-		prefix = strings.ToUpper(strcase.SnakeCase(prefix))
-		name := prefix + "_" + strings.ToUpper(strcase.SnakeCase(field.Name))
-		names = []string{name}
+	if len(names) == 0 {
+		if prefix != "" {
+			prefix = strings.ToUpper(strcase.SnakeCase(prefix))
+			name := prefix + "_" + strings.ToUpper(strcase.SnakeCase(field.Name))
+			names = []string{name}
+		} else if field.Type.Kind() == reflect.Struct {
+			names = []string{"-"}
+		} else {
+			name := strings.ToUpper(strcase.SnakeCase(field.Name))
+			names = []string{name}
+		}
 	}
 	if len(names) > 0 {
 		if err := b.setValue(field, value, names, defaultValue); err != nil {
