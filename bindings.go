@@ -180,7 +180,7 @@ func (b *binder) setValue(field reflect.StructField, value reflect.Value, names 
 		case "File":
 			value.Set(reflect.ValueOf(v.Writer("")))
 		default:
-			setPtr(field.Type.Elem().Kind(), value, v)
+			setPtr(field.Type.Elem().Kind(), name, value, v)
 		}
 	case reflect.Interface:
 		name := field.Type.Name()
@@ -235,7 +235,7 @@ func setSlice(kind reflect.Kind, value reflect.Value, v Env) {
 	}
 }
 
-func setPtr(kind reflect.Kind, value reflect.Value, v Env) {
+func setPtr(kind reflect.Kind, name string, value reflect.Value, v Env) {
 	switch kind {
 	case reflect.String:
 		value.Set(reflect.ValueOf(v.StringP("")))
@@ -248,7 +248,11 @@ func setPtr(kind reflect.Kind, value reflect.Value, v Env) {
 	case reflect.Int32:
 		value.Set(reflect.ValueOf(v.Int32P(0)))
 	case reflect.Int64:
-		value.Set(reflect.ValueOf(v.Int64P(0)))
+		if name == "Duration" {
+			value.Set(reflect.ValueOf(v.DurationP(0)))
+		} else {
+			value.Set(reflect.ValueOf(v.Int64P(0)))
+		}
 	case reflect.Uint:
 		value.Set(reflect.ValueOf(v.UintP(0)))
 	case reflect.Uint8:

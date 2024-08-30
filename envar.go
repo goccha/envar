@@ -608,6 +608,13 @@ func (e Env) Duration(defaultValue time.Duration) time.Duration {
 	}
 	return defaultValue
 }
+func (e Env) DurationP(defaultValue time.Duration) *time.Duration {
+	if e.Has() || e.value != "" {
+		v := e.Duration(defaultValue)
+		return &v
+	}
+	return nil
+}
 
 func Has(names ...string) bool {
 	return Get(names...).Has()
@@ -803,6 +810,10 @@ func Reader(names ...string) *os.File {
 
 func Duration(names ...string) time.Duration {
 	return Get(names...).Duration(0)
+}
+
+func DurationP(names ...string) *time.Duration {
+	return Get(names...).DurationP(0)
 }
 
 func GetHostname(defaultName string) string {

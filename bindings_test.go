@@ -38,8 +38,9 @@ type TestStruct struct {
 	EnvFixValue           string        `envar:"ENV_FIX_VALUE;default=test;local=local-value;development=dev-value;qa=qa-value;staging=staging-value;demo=demo-value;production=production-value"`
 	EnvProductionValue    string        `envar:"ENV_PRODUCTION_VALUE;production=production-value"`
 	NoTag                 string
-	NoNameTag             string `envar:"default=NoNameTagValue"`
-	NoNameTagDefaultValue string `envar:"default=NoNameTagDefaultValue"`
+	NoNameTag             string         `envar:"default=NoNameTagValue"`
+	NoNameTagDefaultValue string         `envar:"default=NoNameTagDefaultValue"`
+	DurationP             *time.Duration `envar:"TEST_DURATION_P;default=10h"`
 	EmbeddedStruct
 }
 
@@ -91,6 +92,7 @@ func Test_Bind(t *testing.T) {
 	assert.Equal(t, "no-name-tag-value", v.NoNameTag)
 	assert.Equal(t, "NoNameTagDefaultValue", v.NoNameTagDefaultValue)
 	assert.Equal(t, "embedded-value", v.EmbeddedValue)
+	assert.Equal(t, "10h0m0s", v.DurationP.String())
 
 	_ = v.WriteFile.Close()
 	if closer, ok := v.ReadFile.(io.Closer); ok {
