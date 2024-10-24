@@ -15,6 +15,7 @@ type TestStruct struct {
 	Expiration            time.Duration `envar:"EXPIRATION;default=10h"`
 	Value                 int64         `envar:"TEST_INT64;default=99"`
 	Values                []string      `envar:"TEST_SLICE;default=test1,test2"`
+	EmptyValues           []string      `envar:"TEST_EMPTY_SLICE"`
 	Bytes                 Bytes         `envar:"TEST_BYTES;default=test123"`
 	ByteArray             []byte        `envar:"TEST_BYTE_ARRAY;default=1,2,3"`
 	Nums                  []int         `envar:"TEST_NUMS;default=1,2"`
@@ -68,6 +69,7 @@ func Test_Bind(t *testing.T) {
 	assert.Equal(t, expect, v.Expiration)
 	assert.Equal(t, int64(99), v.Value)
 	assert.Equal(t, []string{"test1", "test2"}, v.Values)
+	assert.Equal(t, []string{}, v.EmptyValues)
 	assert.Equal(t, Bytes("test123"), v.Bytes)
 	assert.Equal(t, []byte{1, 2, 3}, v.ByteArray)
 	assert.Equal(t, []int{1, 2}, v.Nums)

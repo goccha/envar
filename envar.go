@@ -353,6 +353,9 @@ func (e Env) Bytes(defaultValue string) []byte {
 }
 func (e Env) Split(defaultValue, sep string) []string {
 	a := strings.Split(e.String(defaultValue), sep)
+	if defaultValue == "" && len(a) == 1 && a[0] == "" {
+		return []string{}
+	}
 	if strings.Contains(sep, " ") {
 		buf := make([]string, 0, len(a))
 		for i := range a {
