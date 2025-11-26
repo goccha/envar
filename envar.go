@@ -346,8 +346,29 @@ func (e Env) StringP(defaultValue string) *string {
 	return nil
 }
 func (e Env) Bytes(defaultValue string) []byte {
+	return e.ByteString(defaultValue)
+}
+func (e Env) ByteString(defaultValue string) []byte {
 	if e.value != "" {
 		return []byte(e.value)
+	}
+	return []byte(defaultValue)
+}
+func (e Env) ByteArray(defaultValue string) []byte {
+	if e.value != "" {
+		values := strings.Split(e.value, ",")
+		array := make([]byte, 0, len(values))
+		if len(values) == 1 {
+			return []byte(e.value)
+		}
+		for i, s := range values {
+			if v, err := strconv.ParseUint(s, 10, 8); err != nil {
+				log.Warn("[%d]:%v", i, err)
+			} else {
+				array = append(array, byte(v))
+			}
+		}
+		return array
 	}
 	return []byte(defaultValue)
 }

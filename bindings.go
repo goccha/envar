@@ -170,7 +170,9 @@ func (b *binder) setValue(field reflect.StructField, value reflect.Value, names 
 		value.Set(reflect.ValueOf(v.String("")))
 	case reflect.Slice:
 		if field.Type.Name() == "Bytes" {
-			value.Set(reflect.ValueOf(v.Bytes("")))
+			value.Set(reflect.ValueOf(v.ByteString("")))
+		} else if value.Type() == typeOfBytes {
+			value.Set(reflect.ValueOf(v.ByteArray("")))
 		} else {
 			setSlice(field.Type.Elem().Kind(), value, v)
 		}
@@ -197,6 +199,8 @@ func (b *binder) setValue(field reflect.StructField, value reflect.Value, names 
 	}
 	return nil
 }
+
+var typeOfBytes = reflect.TypeOf([]byte(nil))
 
 func setSlice(kind reflect.Kind, value reflect.Value, v Env) {
 	switch kind {
