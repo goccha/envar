@@ -17,6 +17,7 @@ type TestStruct struct {
 	Values                []string      `envar:"TEST_SLICE;default=test1,test2"`
 	EmptyValues           []string      `envar:"TEST_EMPTY_SLICE"`
 	Bytes                 Bytes         `envar:"TEST_BYTES;default=test123"`
+	NativeBytes           []byte        `envar:"TEST_NATIVE_BYTES;default=test456"`
 	ByteArray             []byte        `envar:"TEST_BYTE_ARRAY;default=1,2,3"`
 	Nums                  []int         `envar:"TEST_NUMS;default=1,2"`
 	Int8s                 []int8        `envar:"TEST_INT8_ARRAY;default=1,2"`
@@ -71,6 +72,7 @@ func Test_Bind(t *testing.T) {
 	assert.Equal(t, []string{"test1", "test2"}, v.Values)
 	assert.Equal(t, []string{}, v.EmptyValues)
 	assert.Equal(t, Bytes("test123"), v.Bytes)
+	assert.Equal(t, []byte("test456"), v.NativeBytes)
 	assert.Equal(t, []byte{1, 2, 3}, v.ByteArray)
 	assert.Equal(t, []int{1, 2}, v.Nums)
 	assert.Equal(t, []int8{1, 2}, v.Int8s)
@@ -114,6 +116,7 @@ func Test_Bind(t *testing.T) {
 	assert.Equal(t, int64(99), v.Value)
 	assert.Equal(t, []string{"test1", "test2"}, v.Values)
 	assert.Equal(t, Bytes("test123"), v.Bytes)
+	assert.Equal(t, []byte("test456"), v.NativeBytes)
 	assert.Equal(t, []byte{1, 2, 3}, v.ByteArray)
 	assert.Equal(t, []int{1, 2}, v.Nums)
 	assert.Equal(t, []int8{1, 2}, v.Int8s)
