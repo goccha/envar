@@ -4,7 +4,7 @@ import (
 	"github.com/goccha/envar"
 )
 
-// DeployEnv represents the deployment environment.
+// NewDeployEnv DeployEnv represents the deployment environment.
 // Deprecated
 func NewDeployEnv(name string, value int) envar.DeployEnv {
 	return envar.NewDeployEnv(name, value)
