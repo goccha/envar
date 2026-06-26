@@ -7,6 +7,10 @@ A simple library that handles environment variables
 ```go
 package example
 
+import (
+    "github.com/goccha/envar"
+)
+
 var host = envar.String("DB_HOST")
 var port = envar.Int("DB_PORT")
 var debug = envar.Bool("DEBUG")
